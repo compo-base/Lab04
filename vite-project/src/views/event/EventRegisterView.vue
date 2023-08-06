@@ -1,21 +1,30 @@
 <script setup lang="ts">
 import { type EventItem } from '@/type'
 import type { PropType } from 'vue'
-
-defineProps({
+import { useRouter } from 'vue-router'
+import { useMessageStore } from '@/stores/message'
+const props = defineProps({
   event: Object as PropType<EventItem>,
   require: true
 })
+
+const router = useRouter()
+const store = useMessageStore()
+function register() {
+  store.updateMessage("You're successfully register for " + props.event?.title)
+  setTimeout(() => {
+    store.resetMessage()
+  }, 3000)
+  router.push({
+    name: 'event-detail',
+    params: {
+      id: props.event?.id
+    }
+  })
+}
 </script>
 
 <template>
-  <div v-if="event">
-    <h1>{{ event.title }}</h1>
-    <div id="nav">
-      <router-link :to="{ name: 'event-detail', params: { id } }">Detail</router-link>
-      <router-link :to="{ name: 'event-register', params: { id } }">Register</router-link>
-      <router-link :to="{ name: 'event-edit', params: { id } }">Edit</router-link>
-    </div>
-    <p>Registration from here</p>
-  </div>
+  <p>Registration from here</p>
+  <button @click="register">Regiter Me</button>
 </template>
