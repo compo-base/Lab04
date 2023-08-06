@@ -26,7 +26,6 @@ EventService.getEvent(eventsPerPage.value, props.page).then(
     events.value = response.data
   }
 )
-NProgress.start()
 EventService.getEvent(eventsPerPage.value, props.page)
   .then((response: AxiosResponse<EventItem[]>) => {
     events.value = response.data
@@ -35,12 +34,8 @@ EventService.getEvent(eventsPerPage.value, props.page)
   .catch(() => {
     router.push({ name: 'NetworkError' })
   })
-  .finally(() => {
-    NProgress.done()
-  })
 onBeforeRouteUpdate((to, from, next) => {
   const toPage = Number(to.query.page)
-  NProgress.start()
   EventService.getEvent(eventsPerPage.value, toPage)
     .then((response: AxiosResponse<EventItem[]>) => {
       events.value = response.data
@@ -49,9 +44,6 @@ onBeforeRouteUpdate((to, from, next) => {
     })
     .catch(() => {
       next({ name: 'NetworkError' })
-    })
-    .finally(() => {
-      NProgress.done()
     })
 })
 
